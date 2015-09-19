@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_bankaccountapp" default="compile.module.bankaccountapp">
+  <dirname property="module.bankaccountapp.basedir" file="${ant.file.module_bankaccountapp}"/>
+  
+  <property name="module.jdk.home.bankaccountapp" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.bankaccountapp" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.bankaccountapp" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.bankaccountapp" value="-encoding windows-1252 -source 8 ${compiler.args}"/>
+  
+  <property name="bankaccountapp.output.dir" value="${module.bankaccountapp.basedir}/out/production/BankAccountApp"/>
+  <property name="bankaccountapp.testoutput.dir" value="${module.bankaccountapp.basedir}/out/test/BankAccountApp"/>
+  
+  <path id="bankaccountapp.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="bankaccountapp.module.production.classpath">
+    <path refid="${module.jdk.classpath.bankaccountapp}"/>
+  </path>
+  
+  <path id="bankaccountapp.runtime.production.module.classpath">
+    <pathelement location="${bankaccountapp.output.dir}"/>
+  </path>
+  
+  <path id="bankaccountapp.module.classpath">
+    <path refid="${module.jdk.classpath.bankaccountapp}"/>
+    <pathelement location="${bankaccountapp.output.dir}"/>
+  </path>
+  
+  <path id="bankaccountapp.runtime.module.classpath">
+    <pathelement location="${bankaccountapp.testoutput.dir}"/>
+    <pathelement location="${bankaccountapp.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.bankaccountapp">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.bankaccountapp">
+    <patternset refid="excluded.from.module.bankaccountapp"/>
+  </patternset>
+  
+  <path id="bankaccountapp.module.sourcepath">
+    <dirset dir="${module.bankaccountapp.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.bankaccountapp" depends="compile.module.bankaccountapp.production,compile.module.bankaccountapp.tests" description="Compile module BankAccountApp"/>
+  
+  <target name="compile.module.bankaccountapp.production" depends="register.custom.compilers" description="Compile module BankAccountApp; production classes">
+    <mkdir dir="${bankaccountapp.output.dir}"/>
+    <javac2 destdir="${bankaccountapp.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.bankaccountapp}/javac">
+      <compilerarg line="${compiler.args.bankaccountapp}"/>
+      <bootclasspath refid="bankaccountapp.module.bootclasspath"/>
+      <classpath refid="bankaccountapp.module.production.classpath"/>
+      <src refid="bankaccountapp.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.bankaccountapp"/>
+    </javac2>
+    
+    <copy todir="${bankaccountapp.output.dir}">
+      <fileset dir="${module.bankaccountapp.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.bankaccountapp.tests" depends="register.custom.compilers,compile.module.bankaccountapp.production" description="compile module BankAccountApp; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.bankaccountapp" description="cleanup module">
+    <delete dir="${bankaccountapp.output.dir}"/>
+    <delete dir="${bankaccountapp.testoutput.dir}"/>
+  </target>
+</project>
